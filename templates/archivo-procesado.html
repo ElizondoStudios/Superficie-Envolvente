@@ -3,4 +3,16 @@
 {% block content %}
   <h1>Se procesó el archivo: {{file_name}}</h1>
   <a href="/descargar-archivo" class="btn btn-primary">Descargar</a>
+  
+  <!-- canvas que nos sirve para hacer render del objeto-->
+  <canvas id="myCanvas"></canvas>
+
+  <!-- pasamos la URL del modelo hecho mesh como una vairable global -->
+  <script>
+    window.meshUrl = "{{ mesh_url }}";
+  </script>
+
+  <!-- cargamos el script the java script-->
+  <script src="{{ url_for('static', filename='scripts/render-mesh.js') }}"></script>
+
 {% endblock %}

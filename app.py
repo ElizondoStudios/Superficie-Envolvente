@@ -1,6 +1,6 @@
 '''
 Dependencias:
-  pip install numpy pillow "pyglet<2" trimesh scipy flask
+  pip install nu`mpy pillow "pyglet<2" trimesh scipy flask
 '''
 
 from flask import Flask, request, render_template, send_file
@@ -23,7 +23,8 @@ def extraer_superficie():
             extension= archivo.filename.split('.')[-1]
             mesh= trimesh.load_mesh(file_obj= archivo, file_type= extension)
             mesh.export(f"./Public/exported-mesh.{extension}")
-            return render_template("archivo-procesado.html", file_name=archivo.filename)
+            mesh.export(f"./static/exported-mesh.{extension}")
+            return render_template("archivo-procesado.html", file_name=archivo.filename, mesh_url = f"./static/mesh/exported-mesh.{extension}")
         except:
             return render_template("error-archivo.html")
     else:

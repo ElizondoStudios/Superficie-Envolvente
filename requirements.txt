@@ -1,0 +1,6 @@
+numpy
+pillow
+pyglet<2
+trimesh
+scipy
+flask
