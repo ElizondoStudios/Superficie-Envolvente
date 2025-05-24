@@ -1,6 +1,6 @@
 '''
 Dependencias:
-  pip install numpy pillow "pyglet<2" trimesh scipy flask
+  pip install nu`mpy pillow "pyglet<2" trimesh scipy flask
 '''
 
 from flask import Flask, request, render_template, send_file
