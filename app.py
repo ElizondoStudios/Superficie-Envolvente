@@ -10,6 +10,7 @@ import trimesh.exchange
 import trimesh.exchange.binvox
 
 app = Flask(__name__)
+extension=""
 
 @app.route("/")
 def root():
@@ -18,13 +19,21 @@ def root():
 @app.route("/extraer-superficie", methods=["POST"])
 def extraer_superficie():
     archivo = request.files["archivo"]
+ 
+    # Extraer la superficie envolvente
     if archivo.filename != "":
         try:
             extension= archivo.filename.split('.')[-1]
-            mesh= trimesh.load_mesh(file_obj= archivo, file_type= extension)
-            mesh.export(f"./Public/exported-mesh.{extension}")
-            mesh.export(f"./static/exported-mesh.{extension}")
-            return render_template("archivo-procesado.html", file_name=archivo.filename, mesh_url = f"./static/mesh/exported-mesh.{extension}")
+            
+            # Guardar el objeto original
+            archivo.save(f"./static/mesh/object.{extension}")
+            
+            # Extraer la superficie envolvente y guardar
+            mesh= trimesh.load_mesh(f"./static/mesh/object.{extension}", file_type= extension)
+            mesh.export(f"./static/mesh/exported-mesh.{extension}")
+
+
+            return render_template("archivo-procesado.html", file_name=archivo.filename, mesh_url = f"./static/mesh/exported-mesh.{extension}", object_url= f"./static/mesh/object.{extension}")
         except:
             return render_template("error-archivo.html")
     else:
@@ -32,7 +41,7 @@ def extraer_superficie():
 
 @app.route("/descargar-archivo")
 def descargar_archivo():
-    file= open("./Public/exported-mesh.obj", "rb")
+    file= open(f"./static/mesh/exported-mesh.{extension}", "rb")
     return send_file(file, download_name=file.name.replace("./Public/", ""))
 
 
