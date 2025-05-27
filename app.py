@@ -3,14 +3,12 @@ Dependencias:
   pip install nu`mpy pillow "pyglet<2" trimesh scipy flask
 '''
 
-from flask import Flask, request, render_template, send_file
-import numpy as np
+from flask import Flask, request, render_template, send_file, session
 import trimesh
-import trimesh.exchange
-import trimesh.exchange.binvox
+from voxelizar import Voxelizar
 
 app = Flask(__name__)
-extension=""
+app.secret_key = 'clave-secreta-super-segura'
 
 @app.route("/")
 def root():
@@ -24,16 +22,18 @@ def extraer_superficie():
     if archivo.filename != "":
         try:
             extension= archivo.filename.split('.')[-1]
+            session["extension"]= extension
             
             # Guardar el objeto original
             archivo.save(f"./static/mesh/object.{extension}")
             
-            # Extraer la superficie envolvente y guardar
-            mesh= trimesh.load_mesh(f"./static/mesh/object.{extension}", file_type= extension)
-            mesh.export(f"./static/mesh/exported-mesh.{extension}")
+            # Voxelizar el objeto original (sólido)
+            obj_vox= Voxelizar(f"./static/mesh/object.{extension}")
 
+            #Voxelizar extrayendo únicamente la superficie envolvente (hueco)
+            obj_vox_mesh= Voxelizar(f"./static/mesh/object.{extension}", True)
 
-            return render_template("archivo-procesado.html", file_name=archivo.filename, mesh_url = f"./static/mesh/exported-mesh.{extension}", object_url= f"./static/mesh/object.{extension}")
+            return render_template("archivo-procesado.html", file_name=archivo.filename, mesh_url = obj_vox_mesh, object_url= obj_vox)
         except:
             return render_template("error-archivo.html")
     else:
@@ -41,8 +41,9 @@ def extraer_superficie():
 
 @app.route("/descargar-archivo")
 def descargar_archivo():
+    extension= session["extension"]
     file= open(f"./static/mesh/exported-mesh.{extension}", "rb")
-    return send_file(file, download_name=file.name.replace("./Public/", ""))
+    return send_file(file, download_name=file.name.replace("./static/mesh/", ""))
 
 
 if __name__ == "__main__":
