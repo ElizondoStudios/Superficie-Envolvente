@@ -7,12 +7,34 @@ import trimesh.exchange.binvox
 # trimesh.util.attach_to_log()
 
 # mesh objects can be created from existing faces and vertex data
-mesh = trimesh.load_mesh('./Turtle.obj')
+mesh = trimesh.load_mesh('./Public/OBJ/Armadillo.obj')
 # mesh.export(file_obj='./Turtle-mesh.obj')
-mesh.show()
-# voxels= trimesh.exchange.binvox.voxelize_mesh(mesh)
-# voxels.export(file_obj='./Turtle-voxels.binvox')
-# voxels.show()
+# mesh.show()
+voxels= trimesh.exchange.binvox.voxelize_mesh(mesh)
+
+file= open("./Public/matriz-texto.txt", "w")
+
+for i in voxels.matrix:
+  for j in i:
+    for k in j:
+      if k:
+        file.write("1,")
+      else:
+        file.write("0,")
+
+# voxels.fill()
+# voxels.as_boxes().export(file_obj='./Public/Armadillo-voxels.obj')
+# voxels.export(file_obj='./Public/Armadillo.binvox')
+
+# voxels.hollow()
+# voxels.as_boxes().export(file_obj='./Public/Armadillo-voxels-SE.obj')
+
+# bytes= trimesh.exchange.binvox.binvox_bytes(voxels, voxels.shape)
+# print(bytes)
+
+# voxels.export(file_obj='./Public/Armadillo-SE.binvox')
+# voxels.export(file_obj='./Public/Armadillo-voxels-hollow.binvox')
+
 
 # vertices = np.array([
 #     [0, 0, 0],  # Vértice 0

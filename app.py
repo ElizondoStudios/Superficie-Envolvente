@@ -5,7 +5,7 @@ Dependencias:
 
 from flask import Flask, request, render_template, send_file, session
 import trimesh
-from voxelizar import Voxelizar
+from voxeles import Voxelizar
 
 app = Flask(__name__)
 app.secret_key = 'clave-secreta-super-segura'
@@ -28,12 +28,12 @@ def extraer_superficie():
             archivo.save(f"./static/mesh/object.{extension}")
             
             # Voxelizar el objeto original (sólido)
-            obj_vox= Voxelizar(f"./static/mesh/object.{extension}")
+            obj_vox, obj_count= Voxelizar(f"./static/mesh/object.{extension}")
 
             #Voxelizar extrayendo únicamente la superficie envolvente (hueco)
-            obj_vox_mesh= Voxelizar(f"./static/mesh/object.{extension}", True)
+            mesh_vox, mesh_count= Voxelizar(f"./static/mesh/object.{extension}", True)
 
-            return render_template("archivo-procesado.html", file_name=archivo.filename, mesh_url = obj_vox_mesh, object_url= obj_vox)
+            return render_template("archivo-procesado.html", file_name=archivo.filename, mesh_url = mesh_vox, mesh_count= mesh_count, object_url= obj_vox, obj_count= obj_count)
         except:
             return render_template("error-archivo.html")
     else:

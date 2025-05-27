@@ -8,13 +8,16 @@ def Voxelizar(file: str, hollow= False):
   voxels= trimesh.exchange.binvox.voxelize_mesh(mesh)
   ext= file.split('.')[-1]
   save_as= ""
+  count=0
 
   if not hollow:
     voxels.fill()
+    count= voxels.filled_count
     save_as= file.replace(f".{ext}", f"-vox.{ext}")
   else:
     voxels.hollow()
+    count= voxels.filled_count
     save_as= file.replace(f".{ext}", f"-vox-mesh.{ext}")
   
   voxels.as_boxes().export(file_obj=save_as, file_type=ext)
-  return save_as
+  return (save_as, count)
