@@ -20,6 +20,3 @@ python -m venv .venv
 
 ### Paso 3:
 pip install -r requirements.txt
-
-## Dependencias
-`pip install numpy pillow "pyglet<2" trimesh scipy flask`
