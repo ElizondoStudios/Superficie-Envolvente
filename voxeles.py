@@ -1,7 +1,17 @@
-from io import BufferedReader
 import trimesh
 import trimesh.exchange
 import trimesh.exchange.binvox
+
+def ExportarTexto(file_name, voxels):
+  file= open(file_name, "w")
+  for i in voxels.matrix:
+    for j in i:
+      for k in j:
+        if k:
+          file.write("1,")
+        else:
+          file.write("0,")
+  file.close()
 
 def Voxelizar(file: str, hollow= False):
   mesh = trimesh.load_mesh(file_obj=file)
