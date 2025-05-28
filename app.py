@@ -1,10 +1,4 @@
-'''
-Dependencias:
-  pip install nu`mpy pillow "pyglet<2" trimesh scipy flask
-'''
-
 from flask import Flask, request, render_template, send_file, session
-import trimesh
 from voxeles import Voxelizar
 
 app = Flask(__name__)
@@ -41,9 +35,16 @@ def extraer_superficie():
 
 @app.route("/descargar-archivo")
 def descargar_archivo():
-    extension= session["extension"]
-    file= open(f"./static/mesh/exported-mesh.{extension}", "rb")
-    return send_file(file, download_name=file.name.replace("./static/mesh/", ""))
+    '''
+    Lógica para descargar zip con todos los archvios:
+        - Objeto voxelizado (.binvox)
+        - Superficie envolvente voxelizada (.binvox)
+        - Objeto voxelizado (.obj)
+        - Superficie envolvente voxelizada (.obj)
+        - Objeto voxelizado binario (.txt)
+        - Superficie envolvente voxelizada (.txt)
+    '''
+    pass
 
 
 if __name__ == "__main__":
