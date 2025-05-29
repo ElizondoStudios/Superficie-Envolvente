@@ -20,3 +20,10 @@ python -m venv .venv
 
 ### Paso 3:
 pip install -r requirements.txt
+
+
+## Cómo se extrae la superficie envolvente
+Se procesa la matriz de voxeles de la siguiente manera:
+1. Se hace un `not` lógico (volteamos todos los valores binarios)
+2. Se hace una dilatación binaria
+3. Se hace un `and` lógico entre la matriz original y la matriz modificada 
