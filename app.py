@@ -1,5 +1,9 @@
-from flask import Flask, request, render_template, send_file, session
-from voxeles import Voxelizar
+from flask import Flask, request, render_template, send_file, session, current_app
+from voxeles import Voxelizar, ExportarTexto
+from zipfile import ZipFile
+import os
+import io
+
 
 app = Flask(__name__)
 app.secret_key = 'clave-secreta-super-segura'
@@ -17,15 +21,19 @@ def extraer_superficie():
         try:
             extension= archivo.filename.split('.')[-1]
             session["extension"]= extension
-            
+            saved_file = f"./static/mesh/object.{extension}"
+
             # Guardar el objeto original
-            archivo.save(f"./static/mesh/object.{extension}")
+            archivo.save(saved_file)
             
             # Voxelizar el objeto original (sólido)
-            obj_vox, obj_count= Voxelizar(f"./static/mesh/object.{extension}")
+            obj_vox, obj_count= Voxelizar(saved_file)
 
             #Voxelizar extrayendo únicamente la superficie envolvente (hueco)
-            mesh_vox, mesh_count= Voxelizar(f"./static/mesh/object.{extension}", True)
+            mesh_vox, mesh_count= Voxelizar(saved_file, True)
+
+            # Obtenemos el objeto como un txt que se puede visualizar en blender
+            ExportarTexto(saved_file)
 
             return render_template("archivo-procesado.html", file_name=archivo.filename, mesh_url = mesh_vox, mesh_count= mesh_count, object_url= obj_vox, obj_count= obj_count)
         except:
@@ -35,17 +43,23 @@ def extraer_superficie():
 
 @app.route("/descargar-archivo")
 def descargar_archivo():
-    '''
-    Lógica para descargar zip con todos los archvios:
-        - Objeto voxelizado (.binvox)
-        - Superficie envolvente voxelizada (.binvox)
-        - Objeto voxelizado (.obj)
-        - Superficie envolvente voxelizada (.obj)
-        - Objeto voxelizado binario (.txt)
-        - Superficie envolvente voxelizada (.txt)
-    '''
-    pass
+    files = ['object-vox-mesh.obj', 'object-vox.obj', 'object.obj', 'object.txt']
+    zip_buffer = io.BytesIO()
 
+    with ZipFile(zip_buffer, 'w') as zip_file:
+        path = "./static/mesh"
+        for file in files:
+            file_path = path + "/" + file
+            zip_file.write(file_path, arcname=file)  # arcname avoids full path
+
+    zip_buffer.seek(0)
+
+    return send_file(
+        zip_buffer,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name='mesh.zip'
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

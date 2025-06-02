@@ -2,8 +2,12 @@ import trimesh
 import trimesh.exchange
 import trimesh.exchange.binvox
 
-def ExportarTexto(file_name, voxels):
-  file= open(file_name, "w")
+def ExportarTexto(file):
+  voxels = ObtenerMatrizVoxeles(file)
+
+  txt_file = f"./static/mesh/object.txt"
+
+  file= open(txt_file, "w")
   for i in voxels.matrix:
     for j in i:
       for k in j:
@@ -31,3 +35,8 @@ def Voxelizar(file: str, hollow= False):
   
   voxels.as_boxes().export(file_obj=save_as, file_type=ext)
   return (save_as, count)
+
+def ObtenerMatrizVoxeles(file: str):
+  mesh = trimesh.load_mesh(file_obj=file)
+  voxels= trimesh.exchange.binvox.voxelize_mesh(mesh)
+  return voxels
