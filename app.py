@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, send_file, session, current_app
-from voxeles import Voxelizar, ExportarTexto
+from voxeles import Voxelizar, ExportarTexto, ExtraerSuperficieEnvolvente
 from zipfile import ZipFile
 import os
 import io
@@ -26,11 +26,11 @@ def extraer_superficie():
             # Guardar el objeto original
             archivo.save(saved_file)
             
-            # Voxelizar el objeto original (sólido)
+            # Voxelizar el objeto original
             obj_vox, obj_count= Voxelizar(saved_file)
 
-            #Voxelizar extrayendo únicamente la superficie envolvente (hueco)
-            mesh_vox, mesh_count= Voxelizar(saved_file, True)
+            #Extraer únicamente las caras exteriores del objeto
+            mesh_vox, mesh_count= ExtraerSuperficieEnvolvente(saved_file)
 
             # Obtenemos el objeto como un txt que se puede visualizar en blender
             ExportarTexto(saved_file)
@@ -43,7 +43,7 @@ def extraer_superficie():
 
 @app.route("/descargar-archivo")
 def descargar_archivo():
-    files = ['object-vox-mesh.obj', 'object-vox.obj', 'object.obj', 'object.txt']
+    files = ['object-superficie-envolvente.obj', 'object-vox.obj', 'object.obj', 'object-bits.txt']
     zip_buffer = io.BytesIO()
 
     with ZipFile(zip_buffer, 'w') as zip_file:
