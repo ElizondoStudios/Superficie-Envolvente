@@ -10,6 +10,11 @@ app.secret_key = 'clave-secreta-super-segura'
 
 @app.route("/")
 def root():
+    #Borrar todos los archivos que estaban antes en el directorio
+    path = "./static/mesh"
+    files= os.listdir(path)
+    for archivo in files:
+        os.remove(f"{path}/{archivo}")
     return render_template("solicitar-archivo.html")
 
 @app.route("/extraer-superficie", methods=["POST"])
@@ -43,11 +48,11 @@ def extraer_superficie():
 
 @app.route("/descargar-archivo")
 def descargar_archivo():
-    files = ['object-superficie-envolvente.obj', 'object-vox.obj', 'object.obj', 'object-bits.txt']
     zip_buffer = io.BytesIO()
 
     with ZipFile(zip_buffer, 'w') as zip_file:
         path = "./static/mesh"
+        files= os.listdir(path)
         for file in files:
             file_path = path + "/" + file
             zip_file.write(file_path, arcname=file)  # arcname avoids full path
