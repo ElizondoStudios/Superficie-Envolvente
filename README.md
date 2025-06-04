@@ -1,29 +1,27 @@
 # Extraer la superficie envolvente de modelos tridimensionales
 
-## Objetivo
-Que el usuario suba un modelo tridimensional, y mostremos usando [ThreeJS](https://threejs.org/), el modelo tridimensional que subió el usuario, así como, la malla (superficie envolvente) del modelo. Estos modelos se van a mostrar en un espacio interactivo, donde mostraremos también, características de cada modelo.
-También, el usuario va a poder descargar el modelo del mallado.
+## Acerca del proyecto
+Cuando el usuario sube un modelo tridimensional, puede visualizar el objeto voxelizado, así como, la superficie envolvente, la cuál se conforma de las caras externas de los voxeles que conforman el objeto voxelizado.
+El usuario puede observar el conteo de caras de cada modelo así como descargar los archivos procesados.
 
-## Comentarios
-- Para ejecutar la aplicación solo es necesario correr el archivo app.py
-- Los archivos de `/templates` son plantillas html que vamos a mostrar al usuario
-- Usamos bootstrap en html
+## Cómo ejecutar el proyecto
+1. Instalar las dependencias en caso de ser necesario
+2. Ejecutar el archivo `app.py`
+3. Ingresar a http://localhost:5000
 
-## En caso de tener errores con las dependencias crear un .venv
+## Instalar las dependencias
+Seguir los siguientes pasos en la terminal
 
 ### Paso 1:
-Desde el folder del proyecto usando bash:
+```sh
 python -m venv .venv
-
+```
 ### Paso 2:
+```sh
 .venv\Scripts\activate
+```
 
 ### Paso 3:
+```sh
 pip install -r requirements.txt
-
-
-## Cómo se extrae la superficie envolvente
-Se procesa la matriz de voxeles de la siguiente manera:
-1. Se hace un `not` lógico (volteamos todos los valores binarios)
-2. Se hace una dilatación binaria
-3. Se hace un `and` lógico entre la matriz original y la matriz modificada 
+```
