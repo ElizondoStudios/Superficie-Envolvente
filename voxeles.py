@@ -77,22 +77,22 @@ def ExtraerSuperficieEnvolvente(file: str):
 
   # Caras definidas por los vértices de los índices
   face_definitions = {
-      'bottom': (3, 2, 1, 0),
-      'top': (4, 5, 6, 7),
-      'front': (0, 1, 5, 4),
-      'right': (1, 2, 6, 5),
-      'back': (2, 3, 7, 6),
-      'left': (3, 0, 4, 7)
+      'abajo': (3, 2, 1, 0),
+      'arriba': (4, 5, 6, 7),
+      'adelante': (0, 1, 5, 4),
+      'derecha': (1, 2, 6, 5),
+      'atras': (2, 3, 7, 6),
+      'izquierda': (3, 0, 4, 7)
   }
 
   # Offset de los vecinos para cada cara
   neighbor_offsets = {
-      'bottom': (0, 0, -1),
-      'top': (0, 0, 1),
-      'front': (0, -1, 0),
-      'right': (1, 0, 0),
-      'back': (0, 1, 0),
-      'left': (-1, 0, 0)
+      'abajo': (0, 0, -1),
+      'arriba': (0, 0, 1),
+      'adelante': (0, -1, 0),
+      'derecha': (1, 0, 0),
+      'atras': (0, 1, 0),
+      'izquierda': (-1, 0, 0)
   }
 
   # Función para obtener o crear los índices de los vértices
