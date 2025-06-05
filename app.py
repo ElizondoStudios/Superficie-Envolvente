@@ -10,8 +10,10 @@ app.secret_key = 'clave-secreta-super-segura'
 
 @app.route("/")
 def root():
-    #Borrar todos los archivos que estaban antes en el directorio
     path = "./static/mesh"
+    # Crear el directorio si no existe
+    os.makedirs(path, exist_ok=True)
+
     files= os.listdir(path)
     for archivo in files:
         os.remove(f"{path}/{archivo}")
@@ -33,10 +35,8 @@ def extraer_superficie():
             
             # Voxelizar el objeto original
             obj_vox, obj_count= Voxelizar(saved_file)
-
             #Extraer únicamente las caras exteriores del objeto
             mesh_vox, mesh_count= ExtraerSuperficieEnvolvente(saved_file)
-
             # Obtenemos el objeto como un txt que se puede visualizar en blender
             ExportarTexto(saved_file)
 
