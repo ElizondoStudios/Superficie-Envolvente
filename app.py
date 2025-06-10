@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, send_file, session, current_app
-from voxeles import Voxelizar, ExportarTexto, ExtraerSuperficieEnvolvente
+from voxeles import Voxelizar, ExportarTexto, ExtraerSuperficieEnvolvente, EliminarArchivosMesh
 from zipfile import ZipFile
 import os
 import io
@@ -26,9 +26,15 @@ def extraer_superficie():
     # Extraer la superficie envolvente
     if archivo.filename != "":
         try:
+            # eliminamos los atiguos meshes
+            path = "./static/mesh/"
+            EliminarArchivosMesh(path)
+
+            # variables generales para guardar el archivo
+            nombre = archivo.filename.split('.')[0]
             extension= archivo.filename.split('.')[-1]
             session["extension"]= extension
-            saved_file = f"./static/mesh/object.{extension}"
+            saved_file = f"{path}{nombre}.{extension}"
 
             # Guardar el objeto original
             archivo.save(saved_file)
