@@ -11,11 +11,17 @@ El usuario puede observar el conteo de caras de cada modelo así como descargar 
 [Cómo descargar un repositorio de Github](https://docs.github.com/en/get-started/start-your-journey/downloading-files-from-github)
 
 ## Cómo ejecutar el proyecto
-1. Instalar las dependencias en caso de ser necesario
+1. Instalar las dependencias en caso de ser necesario (instrucciones abajo en el documento)
 2. Ejecutar el archivo `app.py`
 3. Ingresar a http://localhost:5000
 
-## Instalar las dependencias
+## Uso del programa
+1. Selecciona un documento .obj o .ply (hay opciones en la carpeta public) 
+2. Dar click en el botón azul que dice "Procesar"
+3. En caso de querer descargar los objetos de la superficie envolvente dar click en el botón azul que dice "Descargar Archivos"
+
+
+## Pasos para instalar las dependencias
 Seguir los siguientes pasos en la terminal
 
 ### Paso 1:

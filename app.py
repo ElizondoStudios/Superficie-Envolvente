@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, send_file, session, current_app
-from voxeles import Voxelizar, ExportarTexto, ExtraerSuperficieEnvolvente
+from voxeles import Voxelizar, ExportarTexto, ExtraerSuperficieEnvolvente, EliminarArchivosMesh
 from zipfile import ZipFile
 import os
 import io
@@ -10,8 +10,10 @@ app.secret_key = 'clave-secreta-super-segura'
 
 @app.route("/")
 def root():
-    #Borrar todos los archivos que estaban antes en el directorio
     path = "./static/mesh"
+    # Crear el directorio si no existe
+    os.makedirs(path, exist_ok=True)
+
     files= os.listdir(path)
     for archivo in files:
         os.remove(f"{path}/{archivo}")
@@ -24,19 +26,23 @@ def extraer_superficie():
     # Extraer la superficie envolvente
     if archivo.filename != "":
         try:
+            # eliminamos los atiguos meshes
+            path = "./static/mesh/"
+            EliminarArchivosMesh(path)
+
+            # variables generales para guardar el archivo
+            nombre = archivo.filename.split('.')[0]
             extension= archivo.filename.split('.')[-1]
             session["extension"]= extension
-            saved_file = f"./static/mesh/object.{extension}"
+            saved_file = f"{path}{nombre}.{extension}"
 
             # Guardar el objeto original
             archivo.save(saved_file)
             
             # Voxelizar el objeto original
             obj_vox, obj_count= Voxelizar(saved_file)
-
             #Extraer únicamente las caras exteriores del objeto
             mesh_vox, mesh_count= ExtraerSuperficieEnvolvente(saved_file)
-
             # Obtenemos el objeto como un txt que se puede visualizar en blender
             ExportarTexto(saved_file)
 

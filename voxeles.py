@@ -2,11 +2,14 @@ import trimesh
 import trimesh.exchange
 import trimesh.exchange.binvox
 import numpy as np
+import os
 
 def ExportarTexto(file):
   voxels = ObtenerMatrizVoxeles(file)
 
-  txt_file = f"./static/mesh/object-bits.txt"
+  extension = file.split('.')[-1]
+
+  txt_file = file.replace(f".{extension}", "-bits.txt")
 
   file= open(txt_file, "w")
   for i in voxels.matrix:
@@ -126,3 +129,10 @@ def ExtraerSuperficieEnvolvente(file: str):
   count= len(mesh.faces)
   mesh.export(file_obj=save_as, file_type=ext)
   return (save_as, count)
+
+def EliminarArchivosMesh(path : str):
+  path = './static/mesh'
+  for filename in os.listdir(path):
+      file_path = os.path.join(path, filename)
+      if os.path.isfile(file_path):  # only delete files
+          os.remove(file_path)
